@@ -2,12 +2,12 @@ version: "3.9"
 
 
 services:
-  fastapi-catalog:
+  fastapi-product:
     build:
       context: .
       args:
         BUILD_ENVIRONMENT: ${BUILD_ENVIRONMENT}
-    container_name: catalog_fastapi
+    container_name: fastapi_product
     env_file:
       - .env
     ports:
@@ -15,29 +15,46 @@ services:
     volumes:
       - ./:/app
     depends_on:
-      - db-catalog
+      - mongodb-product
+      - rabbitmq-product
     networks:
-      - catalog-fastapi
+      - product-fastapi
     entrypoint: /bin/sh /app/entrypoint.sh
     command: uvicorn src.api.main:app --reload --host 0.0.0.0 --port 8001 --proxy-headers
 
-  db-catalog:
-    image: postgres:15.1-alpine
-    container_name: catalog_db
+  mongodb-product:
+    image: mongo:6-jammy
+    container_name: mongodb_product
+    ports:
+      - "27017:27017"
     volumes:
-      - catalog_postgres_data:/var/lib/postgresql/data
+      - mongodb_data:/data/db
     env_file:
       - .env
     networks:
-      - catalog-fastapi
+      - product-fastapi
+
+  mongodb-express-product:
+    image: mongo-express
+    container_name: mongodb_express_product
+    restart: always
     ports:
-      - "15432:5432"
+      - "28081:8081"
+    environment:
+      ME_CONFIG_MONGODB_SERVER: mongodb-product
+      ME_CONFIG_BASICAUTH_USERNAME: ${MONGODB_ADMIN_USERNAME}
+      ME_CONFIG_BASICAUTH_PASSWORD: ${MONGODB_ADMIN_PASSWORD}
+      ME_CONFIG_MONGODB_URL: mongodb://mongodb-product:27017/
+    depends_on:
+      - mongodb-product
+    networks:
+      - product-fastapi
 
 
-  rabbitmq-catalog:
+  rabbitmq-product:
     image: rabbitmq:3-management-alpine
     hostname: rabbitmq
-    container_name: catalog_rabbitmq
+    container_name: rabbitmq_product
     ports:
       - "5672:5672"
       - "15672:15672"
@@ -45,19 +62,17 @@ services:
       RABBITMQ_DEFAULT_USER: "guest"
       RABBITMQ_DEFAULT_PASS: "guest"
     volumes:
-      - rabbitmq-data:/var/lib/rabbitmq
+      - rabbitmq_data:/var/lib/rabbitmq
     networks:
-      - catalog-fastapi
+      - product-fastapi
 
 
 
 volumes:
-  catalog_postgres_data:
-  catalog_minio_data:
-  redis-data:
-  rabbitmq-data:
+  rabbitmq_data:
+  mongodb_data:
 
 
 networks:
-  catalog-fastapi:
-    name: catalog-fastapi
+  product-fastapi:
+    name: product-fastapi
