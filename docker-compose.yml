@@ -1,0 +1,63 @@
+version: "3.9"
+
+
+services:
+  fastapi-catalog:
+    build:
+      context: .
+      args:
+        BUILD_ENVIRONMENT: ${BUILD_ENVIRONMENT}
+    container_name: catalog_fastapi
+    env_file:
+      - .env
+    ports:
+      - "5011:8001"
+    volumes:
+      - ./:/app
+    depends_on:
+      - db-catalog
+    networks:
+      - catalog-fastapi
+    entrypoint: /bin/sh /app/entrypoint.sh
+    command: uvicorn src.api.main:app --reload --host 0.0.0.0 --port 8001 --proxy-headers
+
+  db-catalog:
+    image: postgres:15.1-alpine
+    container_name: catalog_db
+    volumes:
+      - catalog_postgres_data:/var/lib/postgresql/data
+    env_file:
+      - .env
+    networks:
+      - catalog-fastapi
+    ports:
+      - "15432:5432"
+
+
+  rabbitmq-catalog:
+    image: rabbitmq:3-management-alpine
+    hostname: rabbitmq
+    container_name: catalog_rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: "guest"
+      RABBITMQ_DEFAULT_PASS: "guest"
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq
+    networks:
+      - catalog-fastapi
+
+
+
+volumes:
+  catalog_postgres_data:
+  catalog_minio_data:
+  redis-data:
+  rabbitmq-data:
+
+
+networks:
+  catalog-fastapi:
+    name: catalog-fastapi

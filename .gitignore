@@ -1,0 +1,16 @@
+.env
+.idea
+
+# celery beat schedule file
+celerybeat-schedule
+
+docker-compose.override.yml
+
+#terraform
+/terrafrom_stage/key.json
+/terraform_stage/.terraform
+/terraform_stage/.terraform.lock.hcl
+/terraform_stage/*.tfvars
+/terraform/.terraform
+/terrafrom/.terrafrom.lock.hcl
+/terraform/*.tfvars
