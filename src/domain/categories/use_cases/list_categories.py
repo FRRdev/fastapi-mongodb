@@ -1,7 +1,9 @@
+from collections.abc import Sequence
 
 from attr import define
 
-from src.domain.categories.dto.output import CategoryOutSchema
+from src.domain.categories.dto.filter import CategoryFilterSchema
+from src.domain.categories.entity import Category
 from src.domain.categories.interfaces import ICategoryRepo
 
 
@@ -9,6 +11,9 @@ from src.domain.categories.interfaces import ICategoryRepo
 class ListCategories:
     category_repo: ICategoryRepo
 
-    async def __call__(self) -> list[CategoryOutSchema]:
-        categories = await self.category_repo.get_categories()
-        return [CategoryOutSchema.from_entity(category) for category in categories]
+    async def __call__(
+        self,
+        params: CategoryFilterSchema,
+    ) -> tuple[Sequence[Category], int]:
+        return await self.category_repo.get_categories(params)
+

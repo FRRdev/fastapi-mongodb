@@ -16,3 +16,9 @@ class CategoryOutSchema(BaseModel):
             name=category.name,
             order=category.order,
         )
+
+
+class CategoryListOutSchema(BaseModel):
+    count: int
+    next_page: bool
+    items: list[CategoryOutSchema]
