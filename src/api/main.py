@@ -2,6 +2,7 @@ from fastapi.responses import JSONResponse
 from starlette.middleware.cors import CORSMiddleware
 from starlette.requests import Request
 
+from src.api.router import include_routers
 from src.containers import container
 from src.utils.exceptions import BaseHTTPException, NotFoundException
 from src.utils.fastapi_dependency_injector import DependencyInjectorFastApi
@@ -22,6 +23,7 @@ def create_app() -> DependencyInjectorFastApi:
         allow_methods=["*"],
         allow_headers=["*"],
     )
+    application.include_router(include_routers())
     application.container = container
     return application
 
