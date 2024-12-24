@@ -59,7 +59,10 @@ class RabbitMQConfig(BaseSettings):
     @field_validator("url")
     def assemble_url(cls, v, values):  # noqa: N805
         data = values.data
-        return v or f"amqp://{data['user']}:{data['password']}@{data['host']}:{data['port']}"
+        return (
+            v
+            or f"amqp://{data['user']}:{data['password']}@{data['host']}:{data['port']}"
+        )
 
 
 class MongoDBConfig(BaseSettings):

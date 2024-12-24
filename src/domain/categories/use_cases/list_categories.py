@@ -16,4 +16,3 @@ class ListCategories:
         params: CategoryFilterSchema,
     ) -> tuple[Sequence[Category], int]:
         return await self.category_repo.get_categories(params)
-

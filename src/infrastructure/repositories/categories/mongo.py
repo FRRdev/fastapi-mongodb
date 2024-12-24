@@ -16,16 +16,29 @@ class MongoDBCategoriesRepository(BaseMongoDBRepository):
         self,
         filters: CategoryFilterSchema,
     ) -> tuple[Sequence[Category], int]:
-        cursor = (
-            self._collection.find()
-            .sort("order")
-            .skip(filters.offset)
-            .limit(filters.limit)
-        )
+        pipeline = [
+            {
+                "$lookup": {
+                    "from": "product",
+                    "localField": "_id",
+                    "foreignField": "category",
+                    "as": "products",
+                },
+            },
+            {
+                "$addFields": {
+                    "product_count": {"$size": "$products"},
+                },
+            },
+            {"$project": {"products": 0}},
+            {"$sort": {"order": 1}},
+            {"$skip": filters.offset},
+            {"$limit": filters.limit},
+        ]
         count = await self._collection.count_documents({})
         categories = [
             convert_category_document_to_entity(category_document)
-            async for category_document in cursor
+            async for category_document in self._collection.aggregate(pipeline)
         ]
         return categories, count
 

@@ -15,5 +15,3 @@ class Gateways(containers.DeclarativeContainer):
         config.mongodb.mongodb_connection_uri,
         serverSelectionTimeoutMS=3000,
     )
-
-

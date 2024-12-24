@@ -7,3 +7,4 @@ from src.utils.entity import BaseEntity
 class Category(BaseEntity):
     name: str
     order: int
+    product_count: int | None = None

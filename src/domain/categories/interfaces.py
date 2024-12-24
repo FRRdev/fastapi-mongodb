@@ -7,16 +7,14 @@ from src.domain.categories.entity import Category
 
 
 class ICreateCategory(Protocol):
-    async def __call__(self, schema: CategoryInSchema) -> Category:
-        ...
+    async def __call__(self, schema: CategoryInSchema) -> Category: ...
 
 
 class IListCategories(Protocol):
     async def __call__(
         self,
         params: CategoryFilterSchema,
-    ) -> tuple[Sequence[Category], int]:
-        ...
+    ) -> tuple[Sequence[Category], int]: ...
 
 
 class ICategoryRepo(Protocol):
@@ -27,5 +25,4 @@ class ICategoryRepo(Protocol):
 
     async def add_category(self, category: Category) -> None: ...
 
-    async def check_category_exists_by_name(self, name: str) -> bool:
-        ...
+    async def check_category_exists_by_name(self, name: str) -> bool: ...

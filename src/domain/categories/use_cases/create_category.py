@@ -1,4 +1,3 @@
-
 from attr import define
 
 from src.domain.categories.dto.input import CategoryInSchema
