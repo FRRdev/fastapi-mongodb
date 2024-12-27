@@ -20,8 +20,8 @@ class MongoDBCategoriesRepository(BaseMongoDBRepository):
             {
                 "$lookup": {
                     "from": "product",
-                    "localField": "_id",
-                    "foreignField": "category",
+                    "localField": "oid",
+                    "foreignField": "category_id",
                     "as": "products",
                 },
             },
@@ -51,3 +51,11 @@ class MongoDBCategoriesRepository(BaseMongoDBRepository):
                 filter={"name": name},
             ),
         )
+
+    async def check_category_exists_by_oid(self, oid: str) -> bool:
+        return bool(
+            await self._collection.find_one(
+                filter={"oid": oid},
+            ),
+        )
+
