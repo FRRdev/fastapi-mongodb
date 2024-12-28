@@ -16,7 +16,7 @@ class CreateProduct:
 
     async def __call__(self, schema: ProductInSchema) -> Product:
         if not await self.category_repo.check_category_exists_by_oid(
-                schema.category_id,
+            schema.category_id,
         ):
             raise CategoryDoesNotExistsException(schema.category_id)
         product = Product(

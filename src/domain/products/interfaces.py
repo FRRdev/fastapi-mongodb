@@ -1,7 +1,6 @@
 from collections.abc import Sequence
 from typing import Protocol
 
-from src.domain.categories.entity import Category
 from src.domain.products.dto.input import ProductInSchema
 from src.domain.products.entity import Product
 
@@ -15,7 +14,6 @@ class IListProducts(Protocol):
 
 
 class IProductRepo(Protocol):
-    async def get_products(self) -> Sequence[Category]: ...
+    async def get_products(self) -> Sequence[Product]: ...
 
     async def add_product(self, product: Product) -> None: ...
-

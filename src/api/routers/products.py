@@ -3,8 +3,12 @@ from fastapi import APIRouter, Depends, HTTPException
 from starlette import status
 
 from src.domain.products.dto.input import ProductInSchema
-from src.domain.products.dto.output import ProductOutSchema
-from src.domain.products.interfaces import ICreateProduct
+from src.domain.products.dto.output import (
+    ProductFullOutSchema,
+    ProductListOutSchema,
+    ProductOutSchema,
+)
+from src.domain.products.interfaces import ICreateProduct, IListProducts
 from src.utils.exceptions.domain_exceptions import DomainException
 
 router = APIRouter()
@@ -30,3 +34,19 @@ async def create_category(
         ) from exception
 
     return ProductOutSchema.from_entity(product)
+
+
+@router.get(
+    "/",
+    summary="Список продуктов.",
+    response_model=ProductListOutSchema,
+    status_code=status.HTTP_200_OK,
+)
+@inject
+async def list_categories(
+    use_case: IListProducts = Depends(Provide["use_cases.list_products"]),
+) -> ProductListOutSchema:
+    products = await use_case()
+    return ProductListOutSchema(
+        [ProductFullOutSchema.from_entity(product) for product in products],
+    )

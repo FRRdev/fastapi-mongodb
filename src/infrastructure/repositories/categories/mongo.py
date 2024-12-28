@@ -58,4 +58,3 @@ class MongoDBCategoriesRepository(BaseMongoDBRepository):
                 filter={"oid": oid},
             ),
         )
-

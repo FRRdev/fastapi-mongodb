@@ -3,6 +3,7 @@ from dependency_injector import containers, providers
 from src.domain.categories.use_cases.create_category import CreateCategory
 from src.domain.categories.use_cases.list_categories import ListCategories
 from src.domain.products.use_cases.create_product import CreateProduct
+from src.domain.products.use_cases.list_products import ListProducts
 
 
 class UseCases(containers.DeclarativeContainer):
@@ -22,4 +23,8 @@ class UseCases(containers.DeclarativeContainer):
         CreateProduct,
         product_repo=repositories.product_repo,
         category_repo=repositories.category_repo,
+    )
+    list_products = providers.Factory(
+        ListProducts,
+        product_repo=repositories.product_repo,
     )

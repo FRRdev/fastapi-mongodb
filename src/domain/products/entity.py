@@ -9,5 +9,5 @@ from src.utils.entity import BaseEntity
 class Product(BaseEntity):
     name: str
     price: Decimal
-    category_id: str
+    category_id: str | None = None
     category: Category | None = None
