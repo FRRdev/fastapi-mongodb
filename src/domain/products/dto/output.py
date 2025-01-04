@@ -10,6 +10,7 @@ class BaseProductOutSchema(BaseModel):
     oid: str
     name: str
     price: Decimal = Field(max_digits=5, decimal_places=2)
+    slug: str | None = None
 
 
 class ProductOutSchema(BaseProductOutSchema):
@@ -34,6 +35,7 @@ class ProductFullOutSchema(BaseProductOutSchema):
             oid=product.oid,
             name=product.name,
             price=product.price,
+            slug=product.slug,
             category=CategorySampleOutSchema.from_entity(product.category),  # type: ignore[arg-type]
         )
 

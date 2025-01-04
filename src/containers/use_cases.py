@@ -23,6 +23,7 @@ class UseCases(containers.DeclarativeContainer):
         CreateProduct,
         product_repo=repositories.product_repo,
         category_repo=repositories.category_repo,
+        slugifier=repositories.slugifier,
     )
     list_products = providers.Factory(
         ListProducts,

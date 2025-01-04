@@ -10,6 +10,7 @@ orjson==3.10.6  # https://github.com/ijl/orjson
 redis==5.0.8  # https://github.com/redis/redis-py
 httpx==0.27.0  # https://github.com/encode/httpx/
 lxml==5.2.2  # https://github.com/lxml/lxml
+python-slugify==8.0.4  # https://github.com/un33k/python-slugify
 pytz==2024.1  # https://github.com/stub42/pytz
 types-pytz==2024.1.0.20240417  # https://github.com/python/typeshed/tree/main/stubs/pytz
 motor==3.6.0

@@ -43,7 +43,7 @@ async def create_category(
     status_code=status.HTTP_200_OK,
 )
 @inject
-async def list_categories(
+async def list_products(
     use_case: IListProducts = Depends(Provide["use_cases.list_products"]),
 ) -> ProductListOutSchema:
     products = await use_case()
