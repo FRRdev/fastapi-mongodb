@@ -1,4 +1,5 @@
 from collections.abc import Mapping
+from decimal import Decimal
 from typing import Any
 
 from src.domain.categories.entity import Category
@@ -21,7 +22,7 @@ def convert_product_document_to_entity(
     return Product(
         oid=product_document["oid"],
         name=product_document["name"],
-        price=product_document["price"],
+        price=Decimal(product_document["price"]),
         slug=product_document.get("slug"),
         category=Category(
             oid=product_document["category"]["oid"],

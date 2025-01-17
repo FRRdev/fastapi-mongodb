@@ -30,7 +30,3 @@ class Slugifier:
             next_suffix = max_suffix + 1  # type: ignore[assignment]
 
         return f"{base_slug}-{next_suffix}"
-
-
-
-

@@ -46,5 +46,3 @@ class MongoDBProductsRepository(BaseMongoDBRepository):
                 {"slug": {"$regex": slug}},
             )
         ]
-
-
