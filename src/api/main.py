@@ -55,12 +55,12 @@ async def repository_not_found_exception_handler(
 
 @app.on_event("startup")
 async def startup_event() -> None:
-    app.container.init_resources()
+    await app.container.init_resources()  # type: ignore[misc]
 
 
 @app.on_event("shutdown")
 async def shutdown_event() -> None:
-    app.container.shutdown_resources()
+    await app.container.shutdown_resources()  # type: ignore[misc]
 
 
 if __name__ == "__main__":

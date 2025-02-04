@@ -16,7 +16,7 @@ services:
       - ./:/app
     depends_on:
       - mongodb-product
-      - rabbitmq-product
+      - kafka-product
     networks:
       - product-fastapi
     entrypoint: /bin/sh /app/entrypoint.sh
@@ -51,25 +51,52 @@ services:
       - product-fastapi
 
 
-  rabbitmq-product:
-    image: rabbitmq:3-management-alpine
-    hostname: rabbitmq
-    container_name: rabbitmq_product
-    ports:
-      - "5672:5672"
-      - "15672:15672"
+  zookeeper-product:
+    image: confluentinc/cp-zookeeper:latest
+    container_name: zookeeper_product
     environment:
-      RABBITMQ_DEFAULT_USER: "guest"
-      RABBITMQ_DEFAULT_PASS: "guest"
-    volumes:
-      - rabbitmq_data:/var/lib/rabbitmq
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - 22181:2181
+    networks:
+      - product-fastapi
+
+  kafka-product:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka_product
+    depends_on:
+      - zookeeper-product
+    ports:
+      - 29092:29092
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper-product:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-product:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    healthcheck:
+      test: nc -z localhost 29092
+    networks:
+      - product-fastapi
+
+  kafka-ui-product:
+    image: provectuslabs/kafka-ui
+    container_name: kafka_ui_product
+    ports:
+      - 8090:8080
+    restart: always
+    environment:
+      - KAFKA_CLUSTERS_0_NAME=local
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka-product:29092
+      - KAFKA_CLUSTERS_0_ZOOKEEPER=zookeeper_product:2181
     networks:
       - product-fastapi
 
 
 
 volumes:
-  rabbitmq_data:
   mongodb_data:
 
 

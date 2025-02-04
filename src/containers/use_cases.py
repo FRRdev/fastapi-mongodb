@@ -24,6 +24,7 @@ class UseCases(containers.DeclarativeContainer):
         product_repo=repositories.product_repo,
         category_repo=repositories.category_repo,
         slugifier=repositories.slugifier,
+        message_broker=gateways.message_broker,
     )
     list_products = providers.Factory(
         ListProducts,

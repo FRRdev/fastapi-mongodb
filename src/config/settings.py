@@ -65,6 +65,13 @@ class RabbitMQConfig(BaseSettings):
         )
 
 
+class KafkaConfig(BaseSettings):
+    kafka_url: str = "kafka-product:29092"
+
+    class Config:
+        env_prefix = "kafka_"
+
+
 class MongoDBConfig(BaseSettings):
     mongodb_connection_uri: str | None = None
     mongodb_admin_username: str | None = None
@@ -85,5 +92,5 @@ class Settings(BaseSettings):
     crypt: CryptConfig = CryptConfig()
     security: SecurityConfig = SecurityConfig()
     logger: LoggingSettings = LoggingSettings()
-    rabbitmq: RabbitMQConfig = RabbitMQConfig()
+    kafka: KafkaConfig = KafkaConfig()
     mongodb: MongoDBConfig = MongoDBConfig()
