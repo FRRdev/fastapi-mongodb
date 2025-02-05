@@ -56,6 +56,7 @@ async def repository_not_found_exception_handler(
 @app.on_event("startup")
 async def startup_event() -> None:
     await app.container.init_resources()  # type: ignore[misc]
+    await container.repositories.user_repo().create_unique_email_constraint()
 
 
 @app.on_event("shutdown")

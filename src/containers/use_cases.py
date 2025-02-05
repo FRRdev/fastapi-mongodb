@@ -4,12 +4,14 @@ from src.domain.categories.use_cases.create_category import CreateCategory
 from src.domain.categories.use_cases.list_categories import ListCategories
 from src.domain.products.use_cases.create_product import CreateProduct
 from src.domain.products.use_cases.list_products import ListProducts
+from src.domain.users.use_cases.create_user import CreateUser
 
 
 class UseCases(containers.DeclarativeContainer):
     repositories = providers.DependenciesContainer()
     gateways = providers.DependenciesContainer()
 
+    # categories
     create_category = providers.Factory(
         CreateCategory,
         category_repo=repositories.category_repo,
@@ -19,6 +21,7 @@ class UseCases(containers.DeclarativeContainer):
         category_repo=repositories.category_repo,
     )
 
+    # products
     create_product = providers.Factory(
         CreateProduct,
         product_repo=repositories.product_repo,
@@ -29,4 +32,10 @@ class UseCases(containers.DeclarativeContainer):
     list_products = providers.Factory(
         ListProducts,
         product_repo=repositories.product_repo,
+    )
+
+    # users
+    create_user = providers.Factory(
+        CreateUser,
+        user_repo=repositories.user_repo,
     )
