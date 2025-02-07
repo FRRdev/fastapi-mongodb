@@ -47,4 +47,7 @@ class UseCases(containers.DeclarativeContainer):
     consume_and_create_notifications = providers.Factory(
         ConsumeAndCreateNotifications,
         message_broker=gateways.message_broker,
+        notification_repo=repositories.notification_repo,
+        user_notification_repo=repositories.user_notification_repo,
+        user_repo=repositories.user_repo,
     )

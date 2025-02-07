@@ -1,3 +1,4 @@
+from collections.abc import AsyncGenerator
 from dataclasses import dataclass
 
 from pymongo import ASCENDING
@@ -21,3 +22,9 @@ class MongoDBUsersRepository(BaseMongoDBRepository):
 
     async def create_unique_email_constraint(self) -> None:
         await self._collection.create_index([("email", ASCENDING)], unique=True)
+
+    async def get_user_ids(
+        self,
+    ) -> AsyncGenerator[str, None]:
+        async for user_document in self._collection.find():
+            yield user_document["oid"]

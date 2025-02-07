@@ -80,6 +80,8 @@ class MongoDBConfig(BaseSettings):
     mongodb_product_collection: str = "product"
     mongodb_category_collection: str = "category"
     mongodb_user_collection: str = "user"
+    mongodb_notification_collection: str = "notification"
+    mongodb_user_notification_collection: str = "user_notification"
 
     class Config:
         env_prefix = "mongodb_"

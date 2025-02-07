@@ -109,6 +109,7 @@ select = [
   "RUF"
 ]
 ignore = [
+    "RUF001",
     "N811",
     "RUF009",
   "S101", # Use of assert detected https://docs.astral.sh/ruff/rules/assert/
