@@ -2,6 +2,9 @@ from dependency_injector import containers, providers
 
 from src.domain.categories.use_cases.create_category import CreateCategory
 from src.domain.categories.use_cases.list_categories import ListCategories
+from src.domain.notifications.use_cases.consume_and_create_notifications import (
+    ConsumeAndCreateNotifications,
+)
 from src.domain.products.use_cases.create_product import CreateProduct
 from src.domain.products.use_cases.list_products import ListProducts
 from src.domain.users.use_cases.create_user import CreateUser
@@ -38,4 +41,10 @@ class UseCases(containers.DeclarativeContainer):
     create_user = providers.Factory(
         CreateUser,
         user_repo=repositories.user_repo,
+    )
+
+    # notifications
+    consume_and_create_notifications = providers.Factory(
+        ConsumeAndCreateNotifications,
+        message_broker=gateways.message_broker,
     )

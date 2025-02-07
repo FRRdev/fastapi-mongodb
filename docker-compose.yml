@@ -22,6 +22,24 @@ services:
     entrypoint: /bin/sh /app/entrypoint.sh
     command: uvicorn src.api.main:app --reload --host 0.0.0.0 --port 8001 --proxy-headers
 
+  worker-notifications:
+    build:
+      context: .
+      args:
+        BUILD_ENVIRONMENT: ${BUILD_ENVIRONMENT}
+    container_name: worker_notifications
+    env_file:
+      - .env
+    volumes:
+      - ./:/app
+    depends_on:
+      - mongodb-product
+      - kafka-product
+    networks:
+      - product-fastapi
+    command: sh -c "python src/worker/start_consumer.py"
+
+
   mongodb-product:
     image: mongo:6-jammy
     container_name: mongodb_product

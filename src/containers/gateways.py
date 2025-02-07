@@ -1,5 +1,3 @@
-from uuid import uuid4
-
 from aiokafka import AIOKafkaConsumer, AIOKafkaProducer
 from dependency_injector import containers, providers
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -28,8 +26,9 @@ class Gateways(containers.DeclarativeContainer):
     kafka_consumer: providers.Provider[AIOKafkaConsumer] = providers.Singleton(
         AIOKafkaConsumer,
         bootstrap_servers=config.kafka.kafka_url,
-        group_id=f"chats-{uuid4()}",
+        group_id="worker_notification",
         metadata_max_age_ms=30000,
+        auto_offset_reset="earliest",
     )
     message_broker: providers.Provider[KafkaMessageBroker] = providers.Resource(
         init_kafka_message_broker,
